@@ -90,11 +90,26 @@ app.get("/create-guest", async (req, res) => {
   if (!name) return res.send("Please add ?name=Name to URL");
 
   try {
+    // check apakah sudah ada guest dengan name tersebut
+    const [rows] = await pool.query("SELECT * FROM guests WHERE name = ?", [
+      name,
+    ]);
+    if (rows.length > 0) {
+      // send data
+      return res.send(`
+            <h3>Guest Already Exists</h3>
+            <p>Name: ${name}</p>
+            <p>Hash: ${rows[0].link_hash}</p>
+            <p>Link: <a href="https://${req.get("host")}/?to=${
+        rows[0].link_hash
+      }">https://${req.get("host")}/?to=${rows[0].link_hash}</a></p>
+        `);
+    }
     // 1. Generate hash
     const linkHash = crypto.randomBytes(5).toString("hex");
 
     // We create the link just to show it to the admin, but we don't save it to DB
-    const fullLink = `${req.protocol}://${req.get("host")}/?to=${linkHash}`;
+    const fullLink = `https://${req.get("host")}/?to=${linkHash}`;
 
     // 2. Store ONLY Name and Hash in Database
     await pool.query("INSERT INTO guests (name, link_hash) VALUES (?, ?)", [
