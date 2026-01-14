@@ -178,8 +178,7 @@ app.get("/create-guest", (req, res) => {
 });
 
 // 3. ADMIN: POST DATA (Now returns JSON)
-// untuk server gunakan sub domain myWedding, kalo di local hilangkan subDomainnya
-app.post("/myWedding/create-guest", async (req, res) => {
+app.post("/create-guest", async (req, res) => {
   const name = req.body.name;
   const isHide = req.body.isHide; // 1 or 0 passed from frontend JSON
 
