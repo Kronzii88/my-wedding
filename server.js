@@ -124,7 +124,7 @@ app.get("/create-guest", (req, res) => {
 
                         try {
                             // Send data to backend via AJAX
-                            const response = await fetch('/create-guest', {
+                            const response = await fetch('/myWedding/create-guest', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ name, isHide })
